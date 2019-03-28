@@ -36,8 +36,8 @@ int ParticleList::getNumberParticles() {
 // Get a pointer to the i-th particle in the list
 ParticlePtr ParticleList::get(int i) {
    ParticlePtr getPtr = NULL;
-   if (i < numParticle){
-      getPtr = particle[i];
+   if (i < numParticles){
+      getPtr = particles[i];
    }
    return getPtr;
 }
@@ -46,13 +46,13 @@ ParticlePtr ParticleList::get(int i) {
 //    This class now has control over the pointer
 //    And should delete the pointer if the particle is removed from the list
 void ParticleList::add_back(ParticlePtr particle) {
-   particle[numParticles] = particle;
+   particles[numParticles] = particle;
    numParticles++;
 }
 
 // Remove all particles from the list
 void ParticleList::clear() {
    for(int i = 0; i < 300; i++){
-      delete particle[i];
+      delete particles[i];
    }
 }

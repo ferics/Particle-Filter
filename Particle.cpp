@@ -11,16 +11,16 @@ int Particle::getY() {
    return y;
 }
 
-Particle::Particle(int xPos, int yPos, Orientation z){
-   x = xPos;
-   y = yPos;
-   direction = z;
+Particle::Particle(int x, int y, Orientation direction){
+   this->x = x;
+   this->y = y;
+   this->direction = direction;
 }
 
 Particle::~Particle(){
-   delete x;
-   delete y;
-   delete direction;
+   delete this->x;
+   delete this->y;
+   delete this->direction;
 }
 
 // Orientation of the particle

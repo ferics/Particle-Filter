@@ -33,7 +33,11 @@ public:
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
-
+private:
+   Grid maze;
+   int rows;
+   int cols;
+   ParticleList* list;
 };
 
 #endif // COSC_ASS_ONE_PARTICLE_FILTER
