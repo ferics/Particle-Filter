@@ -22,14 +22,10 @@ ParticleList::ParticleList() {
 // Clean-up the particle list
 ParticleList::~ParticleList() {
    clear();
-   delete *particles;
 }
 
 // Number of particles in the ParticleList
 int ParticleList::getNumberParticles() {
-   for(int i = 0; i < 300; i++){
-      numParticles++;
-   }
    return numParticles;
 }
 

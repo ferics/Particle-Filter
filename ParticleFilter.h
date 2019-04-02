@@ -24,6 +24,7 @@ public:
 
    // A new observation of the robot, of size 3x3
    void newObservation(Grid observation);
+   
 
    // Return a DEEP COPY of the ParticleList of all particles representing
    //    the current possible locations of the robot
@@ -34,7 +35,7 @@ public:
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
 private:
-   Grid maze;
+   char** maze;
    int rows;
    int cols;
    ParticleList* list;

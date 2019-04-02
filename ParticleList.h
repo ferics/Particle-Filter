@@ -41,7 +41,7 @@ public:
    /* This is a suggestion of what you could use. */
    /* You can change this code.                   */
 private:
-   ParticlePtr    particles[300];
+   ParticlePtr    particles[20000];
    int            numParticles;
 };
 
