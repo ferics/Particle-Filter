@@ -11,6 +11,7 @@ ParticleFilter::ParticleFilter(char** maze, int rows, int cols) {
    this->rows = rows;
    this->cols = cols;
    this->list = new ParticleList();
+   addParticlesToEmptyList();
 }
 
 // Clean-up the Particle Filter
@@ -20,44 +21,74 @@ ParticleFilter::~ParticleFilter() {
 
 // A new observation of the robot, of size 3x3
 void ParticleFilter::newObservation(Grid observation) {
+   int intDirection = -1;
+   for (int i = 0; i< 3; i++){
+      for (int j = 0; j < 3; j++){
+         if (observation[i][j] == '<'){
+            intDirection = ORIEN_LEFT;
+         } else if (observation[i][j] == '^'){
+            intDirection = ORIEN_UP;
+         } else if (observation[i][j] == '>'){
+            intDirection = ORIEN_RIGHT;
+         } else if (observation[i][j] == 'v'){
+            intDirection = ORIEN_DOWN;
+         }
+      }
+   }
+
    Grid smallMaze = NULL;
 
+   //making an empty 3x3 grid
+   //REFER to the provided unit_test.cpp
    smallMaze = new char*[OBSERVATION_DIMENSION];
    for (int i = 0; i != OBSERVATION_DIMENSION; ++i) {
       smallMaze[i] = new char[OBSERVATION_DIMENSION];
    }
 
+   // smallMaze = observation;
+
+
    for(int i = 0; i < rows; i++){
       for(int j = 0; j < cols; j++){
-         if(maze[i][j] == '.'){
-            this->list->add_back(new Particle(i,j,ORIEN_LEFT));
-            // std::cout << "debug1" << std::endl;
-            this->list->add_back(new Particle(i,j,ORIEN_UP));
-            // std::cout << "debug2" << std::endl;
-            this->list->add_back(new Particle(i,j,ORIEN_RIGHT));
-            // std::cout << "debug3" << std::endl;
-            this->list->add_back(new Particle(i,j,ORIEN_DOWN)); 
-            // std::cout << "debug4" << std::endl;
+         if(maze[j][i] == '.'){
+            smallMaze = {[j-1][i-1],[j][i-1],[j+1][i-1],[j-1][i],[j][i],[j+1][i],[j-1][i+1],[j][i+1],[j+1][i+1]}
          }
-         // std::cout << "debug5" << std::endl;
       }
-      // std::cout << "debug6" << std::endl;
    }
 
-   // for(int i = 0; i < OBSERVATION_DIMENSION; i++){
-   //    for(int j = 0; j < OBSERVATION_DIMENSION; j++){
-         
+
+   // ParticleList* list2 = new ParticleList();
+   // for (int i = 0; i < 3; i++){
+   //    for (int j = 0; j < 3; j++){
+   //       list2->add_back(new Particle(i,j,intDirection));
    //    }
    // }
 
+   // // for (int i = 0; i < getNumberParticles(); i++){
+   // //    if
+   // // }
 
-   std::cout << "debug6" << std::endl;
+
+   std::cout << intDirection << std::endl;
+   // std::cout << "debug6" << std::endl;
    // this->list->clear();
-   
 }
 
 // Return a DEEP COPY of the ParticleList of all particles representing
 //    the current possible locations of the robot
 ParticleList* ParticleFilter::getParticles() {
    return list;
+}
+
+void ParticleFilter::addParticlesToEmptyList(){
+   for(int i = 0; i < rows; i++){
+      for(int j = 0; j < cols; j++){
+         if(maze[i][j] == '.'){
+            list->add_back(new Particle(j,i,ORIEN_LEFT));
+            list->add_back(new Particle(j,i,ORIEN_UP));
+            list->add_back(new Particle(j,i,ORIEN_RIGHT));
+            list->add_back(new Particle(j,i,ORIEN_DOWN)); 
+         }
+      }
+   }
 }

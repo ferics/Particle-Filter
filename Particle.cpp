@@ -18,9 +18,9 @@ Particle::Particle(int x, int y, Orientation direction){
 }
 
 Particle::~Particle(){
-   delete &x;
-   delete &y;
-   delete &direction;
+   // delete &x;
+   // delete &y;
+   // delete &direction;
 }
 
 // Orientation of the particle

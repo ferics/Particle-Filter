@@ -39,6 +39,7 @@ private:
    int rows;
    int cols;
    ParticleList* list;
+   void addParticlesToEmptyList();
 };
 
 #endif // COSC_ASS_ONE_PARTICLE_FILTER
