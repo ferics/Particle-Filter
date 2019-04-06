@@ -10,11 +10,27 @@ int Particle::getX() {
 int Particle::getY() {
    return y;
 }
+// Orientation of the particle
+Orientation Particle::getOrientation() {
+   return orientation;
+}
 
-Particle::Particle(int x, int y, Orientation direction){
+void Particle::setX(int x){
+   this->x = x;
+}
+
+void Particle::setY(int y){
+   this->y = y;
+}
+
+void Particle::setOrientation(Orientation orientation){
+   this->orientation = orientation;
+}
+
+Particle::Particle(int x, int y, Orientation orientation){
    this->x = x;
    this->y = y;
-   this->direction = direction;
+   this->orientation = orientation;
 }
 
 Particle::~Particle(){
@@ -23,7 +39,3 @@ Particle::~Particle(){
    // delete &direction;
 }
 
-// Orientation of the particle
-Orientation Particle::getOrientation() {
-   return direction;
-}

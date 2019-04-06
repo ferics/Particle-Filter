@@ -20,7 +20,7 @@ public:
    // Orientation of the particle
    Orientation getOrientation();
 
-   Particle(int x,int y, Orientation z);
+   Particle(int x,int y, Orientation orientation);
    ~Particle();
 
 
@@ -28,10 +28,13 @@ public:
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
 
+   void setX(int x);
+   void setY(int y);
+   void setOrientation(Orientation orientation);
 private:
    int x;
    int y;
-   Orientation direction;
+   Orientation orientation;
 
 };
 
