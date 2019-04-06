@@ -41,13 +41,7 @@ private:
    ParticleList* list;
    void addParticlesToEmptyList();
    bool compareGrids(Grid observation, Grid particleGrid);
-   Grid compareMaze(int x, int y, Orientation orientation);
-   // Grid compareMaze(int x, int y);
-   // bool compareParticles(Particle* p1, Particle* p2);
-   bool firstObservation;
-   Orientation previousOrientation;
-   void rotateParticle(Orientation orientation);
-   void shiftParticle(Orientation orientation);
+   Grid gridFromParticle(int x, int y, Orientation orientation);
 };
 
 #endif // COSC_ASS_ONE_PARTICLE_FILTER

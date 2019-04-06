@@ -21,7 +21,7 @@ ParticleList::ParticleList() {
 
 // Clean-up the particle list
 ParticleList::~ParticleList() {
-   clear();
+   // clear();
 }
 
 // Number of particles in the ParticleList
