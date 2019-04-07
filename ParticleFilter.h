@@ -39,9 +39,15 @@ private:
    int rows;
    int cols;
    ParticleList* list;
-   void addParticlesToEmptyList();
+   ParticleList* listFilter;
    bool compareGrids(Grid observation, Grid particleGrid);
-   Grid gridFromParticle(int x, int y, Orientation orientation);
+   Grid compareMaze(int x, int y, Orientation orientation);
+   void addParticlesToEmptyList();
+   bool firstObservation;
+   Orientation previousOrientation;
+   void rotateParticle(Orientation orientation);
+   void shiftParticle(Orientation orientation);
+   bool compareParticles(Particle* p1, Particle* p2);
 };
 
 #endif // COSC_ASS_ONE_PARTICLE_FILTER

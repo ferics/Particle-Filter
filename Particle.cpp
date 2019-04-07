@@ -3,16 +3,16 @@
 
 // x-co-ordinate of the particle
 int Particle::getX() {
-   return x;
+   return this->x;
 }
 
 // y-co-ordinate of the particle
 int Particle::getY() {
-   return y;
+   return this->y;
 }
 // Orientation of the particle
 Orientation Particle::getOrientation() {
-   return orientation;
+   return this->orientation;
 }
 
 void Particle::setX(int x){
