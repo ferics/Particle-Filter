@@ -13,10 +13,19 @@
 
 // Initialise a new particle filter with a given maze of size (x,y)
 ParticleList::ParticleList() {
-   for(int i = 0; i < 300; i++){
+   for(int i = 0; i < PARTICLE_SIZE; i++){
       particles[i] = 0;
    }
    numParticles = 0;
+}
+
+//Copy constructor
+ParticleList::ParticleList(ParticleList& particles){
+   numParticles = 0;
+   for (int i = 0; i < PARTICLE_SIZE; i++){
+      add_back(new Particle(*(particles.get(i))));
+      numParticles++;
+   }
 }
 
 // Clean-up the particle list
@@ -48,7 +57,7 @@ void ParticleList::add_back(ParticlePtr particle) {
 
 // Remove all particles from the list
 void ParticleList::clear() {
-   for(int i = 0; i < 300; i++){
+   for(int i = 0; i < PARTICLE_SIZE; i++){
       delete particles[i];
    }
 }

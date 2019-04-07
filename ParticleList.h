@@ -37,6 +37,7 @@ public:
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
 
+   ParticleList(ParticleList& particles);
 
    /* This is a suggestion of what you could use. */
    /* You can change this code.                   */

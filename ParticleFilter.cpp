@@ -35,6 +35,7 @@ void ParticleFilter::newObservation(Grid observation) {
       currentOrientation = ORIEN_DOWN;
    }
    // std::cout << intDirection << std::endl;
+   // previousOrientation = currentOrientation;
 
    if(!firstObservation){
       /* Compare current orientation to the previous orientation
@@ -85,13 +86,15 @@ void ParticleFilter::newObservation(Grid observation) {
    // std::cout << "Size of listFilter:" << listFilter->getNumberParticles() << std::endl << std::endl;
    list = listFilter;
    firstObservation = false;
+   previousOrientation = currentOrientation;
    // listFilter->clear();
 }
 
 // Return a DEEP COPY of the ParticleList of all particles representing
 //    the current possible locations of the robot
 ParticleList* ParticleFilter::getParticles() {
-   return list;
+   ParticleList* deepCopy(list);
+   return deepCopy;
 }
 
 void ParticleFilter::addParticlesToEmptyList(){
@@ -157,8 +160,6 @@ bool ParticleFilter::compareParticles(Particle* p1, Particle* p2) {
    bool xCompare = false;
    bool yCompare = false;
    bool oCompare = false;
-   std::cout << "p1 x: " << p1->getX() << std::endl;
-   std::cout << "p2 x: " << p2->getX() << std::endl;
    if (p1->getX() == p2->getX()) {
       xCompare = true;
    }
