@@ -1,3 +1,60 @@
+/**
+ * Particle Filter class that implements a list of particles
+ * for all possible location (particles) of a robot within a
+ * given maze and observations.
+ * 
+ * BEGIN
+ *    CREATE an empty list
+ *       POPULATE the empty list with all possible open spaces
+ *       in the maze and all orientation
+ *    KEEP TRACK of the orientation with the previous orientation
+ *       IF it is the first observation
+ *          SET the previous orientation to the current observation
+ *          orientation
+ *       ELSE continue with algorithm THEN set it after the algorithm
+ *    CHECK IF it is the first observation
+ *       IF(firstObservation)
+ *          CONTINUE with algorithm
+ *       ELSE
+ *          CHANGE all particles orientation IF robot rotated
+ *          CHANGE all particles x/y coordinate IF robot moved
+ *    CREATE new empty list to filter
+ *    SEARCH through the original list and find the particle that matches
+ *    with the observation
+ *       IF matches THEN add that particle to the new list
+ *       REPEAT till last particle
+ *    REPLACE original list with new list that filtered the particles
+ * END
+ * 
+ * Issues encountered:
+ * Program might run into segmentation fault if it cannot begin to populate
+ * the original list. REFER to addParticlesToEmptyList() for implementation.
+ * Program did not check if the list was to add the same/duplicate particles.
+ * 
+ * Rather than searching the whole maze, the design was decided and implemented
+ * such that it searches the list of all particles THEN find the particle that
+ * matches to the observation THEN add the particle to a new list. Also, rather
+ * than duplicating two large particles list then deleting the ones that don't match
+ * the observation, it was decided and implemented to add it instead.
+ * This is done to ensure there are no NULL elements all over the list when the elements
+ * are deleted (not matched).
+ * NOTE: Unit tests include the provided sample as this test passes the sample01 test.
+ * 
+ * Quality of this software design.
+ * Pros:
+ *    -Code blocks were taken out of newObservatin() as much as possible to ensure readability
+ *     such as rotating/shifting the particles in the particle list.
+ *    -All simple functionalities such as comparing two grids and extracting the grid from a
+ *     given particle are also broken down into smaller functions outside newObservation().
+ * Cons:
+ *    -Some variable names make less sense than the other, such as smallMaze (refer to the
+ *     small 3x3 grid extract from a particle)
+ *    -Some magic numbers were  used such as gri[1][1] as refered to the CENTER of the grid that
+ *     could be defined elsewhere as a #define.
+ * 
+ *  @author Chanboth Som
+ */
+
 #include "ParticleFilter.h"
 #include "ParticleList.h"
 
@@ -18,7 +75,6 @@ ParticleFilter::ParticleFilter(char** maze, int rows, int cols) {
 
 // Clean-up the Particle Filter
 ParticleFilter::~ParticleFilter() {
-   // delete list;
 }
 
 // A new observation of the robot, of size 3x3
@@ -34,8 +90,6 @@ void ParticleFilter::newObservation(Grid observation) {
    } else if (observation[1][1] == 'v'){
       currentOrientation = ORIEN_DOWN;
    }
-   // std::cout << intDirection << std::endl;
-   // previousOrientation = currentOrientation;
 
    if(!firstObservation){
       /* Compare current orientation to the previous orientation
@@ -63,19 +117,10 @@ void ParticleFilter::newObservation(Grid observation) {
             int yCord = list->get(i)->getY();
             Orientation orient = list->get(i)->getOrientation();
          
-            if(compareGrids(observation, compareMaze(xCord,yCord,orient))){
+            if(compareGrids(observation, gridFromParticle(xCord,yCord,orient))){
 
                Particle* newPar = new Particle(xCord,yCord,currentOrientation);
-               // Particle* tempPar = list->get(i+1);
-
-               // std::cout << "(" << tempPar->getX() <<","<< tempPar->getY() << ","<<tempPar->getOrientation() <<")"<< std::endl;
-
-               
-               // if (!compareParticles(list->get(i), list->get(i+1))) {
                   listFilter->add_back(newPar);
-                  // std::cout << "particle added: ";
-                  // std::cout << "(" << newPar->getX() <<","<< newPar->getY() << ","<<newPar->getOrientation() <<")"<< std::endl;
-               // }
                match = true;
             } else {
                match = false;
@@ -83,11 +128,9 @@ void ParticleFilter::newObservation(Grid observation) {
          }
       }
    }
-   // std::cout << "Size of listFilter:" << listFilter->getNumberParticles() << std::endl << std::endl;
    list = listFilter;
    firstObservation = false;
    previousOrientation = currentOrientation;
-   // listFilter->clear();
 }
 
 // Return a DEEP COPY of the ParticleList of all particles representing
@@ -97,6 +140,7 @@ ParticleList* ParticleFilter::getParticles() {
    return deepCopy;
 }
 
+//Populate the empty list with all possible particles on the open spaces
 void ParticleFilter::addParticlesToEmptyList(){
    for(int i = 0; i < rows; i++){
       for(int j = 0; j < cols; j++){
@@ -110,7 +154,7 @@ void ParticleFilter::addParticlesToEmptyList(){
    }
 }
 
-Grid ParticleFilter::compareMaze(int x, int y, Orientation orientation){
+Grid ParticleFilter::gridFromParticle(int x, int y, Orientation orientation){
     Grid smallMaze = NULL;
 
    //making an empty 3x3 grid
@@ -120,6 +164,8 @@ Grid ParticleFilter::compareMaze(int x, int y, Orientation orientation){
       smallMaze[i] = new char[OBSERVATION_DIMENSION];
    }
 
+   //Point to the top left corner away from the particle
+   //THEN start copying the maze's content to the 3x3 grid
    int xCorner = x - 1;
    int yCorner = y - 1;
 
@@ -129,6 +175,7 @@ Grid ParticleFilter::compareMaze(int x, int y, Orientation orientation){
       }
    }
 
+   //Change the copied grid (smallMaze) centre to where the robot is facing.
    if(orientation == 0){
       smallMaze[1][1] = '<';
    } else if (orientation == 1){
@@ -142,8 +189,9 @@ Grid ParticleFilter::compareMaze(int x, int y, Orientation orientation){
    return smallMaze;
 }
 
-bool ParticleFilter::compareGrids(Grid observation, Grid particleGrid) {
-   
+//Compare two given 3x3 grids
+//Purpose: compare the observation and the grid from the particle
+bool ParticleFilter::compareGrids(Grid observation, Grid particleGrid) {  
    bool same = true;
    for (int y = 0; y < OBSERVATION_DIMENSION; y++) {
       for (int x = 0; x < OBSERVATION_DIMENSION; x++) {
@@ -155,33 +203,14 @@ bool ParticleFilter::compareGrids(Grid observation, Grid particleGrid) {
    return same;
 }
 
-bool ParticleFilter::compareParticles(Particle* p1, Particle* p2) {
-   bool match = false;
-   bool xCompare = false;
-   bool yCompare = false;
-   bool oCompare = false;
-   if (p1->getX() == p2->getX()) {
-      xCompare = true;
-   }
-   if (p1->getY() == p2->getY()) {
-      yCompare = true;
-   }
-   if (p1->getOrientation() == p2->getOrientation()) {
-      oCompare = true;
-   }
-   if (xCompare && yCompare && oCompare) {
-      match = true;
-   }
-   return match;
-}
-
-
+//Rotate all particles' orientation in the list as it had rotated
 void ParticleFilter::rotateParticle(Orientation orientation){
    for(int i = 0; i < list->getNumberParticles(); i++){
       list->get(i)->setOrientation(orientation);
    }
 }
 
+//Shift particles' x/y coordinate in the list as it had moved 1 unit
 void ParticleFilter::shiftParticle(Orientation orientation){
    if(orientation == 0){
       for(int i = 0; i < list->getNumberParticles(); i++){

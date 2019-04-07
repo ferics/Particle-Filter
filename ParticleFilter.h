@@ -41,7 +41,7 @@ private:
    ParticleList* list;
    ParticleList* listFilter;
    bool compareGrids(Grid observation, Grid particleGrid);
-   Grid compareMaze(int x, int y, Orientation orientation);
+   Grid gridFromParticle(int x, int y, Orientation orientation);
    void addParticlesToEmptyList();
    bool firstObservation;
    Orientation previousOrientation;
